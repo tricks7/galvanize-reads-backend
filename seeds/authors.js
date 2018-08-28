@@ -1,22 +1,22 @@
 
 exports.seed = function(knex, Promise) {
   return Promise.all([
-    // Deletes ALL existing entries
     knex('authors').del(),
   ]).then(function() {
     return Promise.all([
-    // Inserts seed entries
     knex('authors').insert({
       first_name: 'Alex',
       last_name: 'Martelli',
       biography: 'Alex Martelli spent 8 years with IBM Research, winning three Outstanding Technical Achievement Awards.He then spent 13 as a Senior Software Consultant at think3 inc, developing libraries, network protocols, GUI engines, event frameworks, and web access frontends. He has also taught programming languages, development methods, and numerical computing at Ferrara University and other venues. He\'s a C++ MVP for Brainbench, and a member of the Python Software Foundation. He currently works for AB Strakt, a Python-centered software house in Goteborg, Sweden, mostly by telecommuting from his home in Bologna, Italy. Alex\'s proudest achievement is the articles that appeared in Bridge World (January/February 2000), which were hailed as giant steps towards solving issues that had haunted contract bridge theoreticians for decades.',
       portrait_url: 'https://s3-us-west-2.amazonaws.com/assessment-images/galvanize_reads/photos/alex_martelli.jpg'
+      
     }).returning('id'),
     knex('authors').insert({
       first_name: 'Anna',
       last_name: 'Ravenscroft',
       biography: 'Anna Martelli Ravenscroft is an experienced speaker and trainer, with diverse background developing curricula for church, regional transit, disaster preparedness; developing web applications for therapy, learning, fitness; writing technical books, articles and presentations; active member of Open Source community; skilled at translating between IT professionals and end users.',
       portrait_url: 'https://s3-us-west-2.amazonaws.com/assessment-images/galvanize_reads/photos/anna_ravenscroft.jpg'
+      
     }).returning('id'),
     knex('authors').insert({
       first_name: 'Steve',
@@ -44,5 +44,53 @@ exports.seed = function(knex, Promise) {
     }).returning('id'),
     
   ]);
-  })}
+  }).then(function(authors) {
+
+    var authorIDs = authors.map(function(authorID) {
+        return authorID[0];
+    });
+
+    var bookAuthors = [
+      {
+        bookTitle: 'Python In A Nutshell',
+        authorID: authorIDs[0]
+      },
+      {
+        bookTitle: 'Python In A Nutshell',
+        authorID: authorIDs[0]
+      },
+      {
+        bookTitle: 'Python In A Nutshell',
+        authorID: authorIDs[0]
+      },
+      {
+        bookTitle: 'Think Python',
+        authorID: authorIDs[1]
+      },
+      {
+        bookTitle: 'Learning React Native',
+        authorID: authorIDs[2]
+      },
+      {
+        bookTitle: 'You Don\'t Know JS: ES6 & Beyond',
+        authorID: authorIDs[3]
+      },
+      {
+        bookTitle: 'You Don\'t Know JS: Scope & Closures',
+        authorID: authorIDs[3]
+      },
+      {
+        bookTitle: 'You Don\'t Know JS: Async & Performance',
+        authorID: authorIDs[3]
+      },
+    ];
+
+    return Promise.all(bookAuthors.map(function(el) {
+        return getBookID(el.bookTitle, knex, Promise)
+          .then(function(book) {
+            return insertBookAuthor(book.id, el.authorID, knex, Promise);
+        });
+    }));
+
+  })}; 
 
