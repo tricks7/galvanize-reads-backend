@@ -6,11 +6,10 @@ exports.up = function(knex, Promise){
       table.string('last_name').notNullable();
       table.text('biography').notNullable();
       table.text('portrait_url').notNullable();
-      table.string('book_title').notNullable();
+      table.string('book_title');
       table.integer('book_id')
         .references('id')
         .inTable('books')
-        .onDelete('CASCADE');
     });
   };
   

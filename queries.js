@@ -1,6 +1,14 @@
-var knex = require('./knex');
+const database = require('./database-connection')
 
-// *** books *** //
+const getAll = () => {
+    return database('authors', 'books').select()
+}
+
+module.exports = {
+    getAll
+}
+
+/* var knex = require('./knexfile');
 
 function getBooks() {
   return knex('books')
@@ -95,32 +103,6 @@ function deleteAuthor(authorID) {
     .where('id', authorID);
 }
 
-// *** users *** //
-
-function getUsers() {
-  return knex('users')
-    .select();
-}
-
-function getSingleUser(userID) {
-  return knex('users')
-    .select()
-    .where('id', userID);
-}
-
-function addUser(obj) {
-  return knex('users')
-    .insert(obj);
-}
-
-// *** helpers *** //
-
-function makeAdmin(userID) {
-  return knex('users')
-    .where('id', parseInt(userID))
-    .update({ admin: true });
-}
-
 module.exports = {
   getBooks: getBooks,
   getSingleBook: getSingleBook,
@@ -132,8 +114,4 @@ module.exports = {
   addAuthor: addAuthor,
   updateAuthor: updateAuthor,
   deleteAuthor: deleteAuthor,
-  getUsers: getUsers,
-  getSingleUser: getSingleUser,
-  addUser: addUser,
-  makeAdmin: makeAdmin,
-};
+}; */
